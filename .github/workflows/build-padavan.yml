@@ -32,16 +32,16 @@ jobs:
         pkg-config zlib1g-dev libgmp3-dev libmpc-dev libmpfr-dev libncurses5-dev libltdl-dev wget
     - name: Clone source code
       env:
-        KERNEL: 4.4
+        KERNEL: 3.4
       run: |
-        git clone --depth=1 https://github.com/MeIsReallyBa/padavan-4.4.git /opt/rt-n56u
+        git clone --depth=1 https://github.com/hanwckf/rt-n56u.git /opt/rt-n56u
         cd /opt/rt-n56u/toolchain-mipsel
         sh dl_toolchain.sh
         mkdir -p /opt/images/
     - name: Build Firmware
       env:
         TNAME: RM2100
-        KERNEL: 4.4
+        KERNEL: 3.4
       run: |
         cd /opt/rt-n56u/trunk
         if [ ! -f configs/templates/$TNAME.config ] ; then
@@ -53,10 +53,6 @@ jobs:
         ################################################################################################
         #因不同型号配置功能不一样，所以先把配置项删除，如果你自己要添加其他的，也要写上删除这一条，切记！！！
         ################################################################################################
-        sed -i '/CONFIG_FIRMWARE_ENABLE_IPV6/d' .config #删除配置项IPv6开关
-        sed -i '/CONFIG_FIRMWARE_INCLUDE_SFE/d' .config #删除配置项硬件NAT加速
-        sed -i '/CONFIG_FIRMWARE_INCLUDE_OC/d' .config #删除配置项CPU超频
-        sed -i '/CONFIG_FIRMWARE_MT7621_OC/d' .config #删除配置项超频频率
         sed -i '/CONFIG_FIRMWARE_INCLUDE_MENTOHUST/d' .config #删除配置项MENTOHUST
         sed -i '/CONFIG_FIRMWARE_INCLUDE_SCUTCLIENT/d' .config #删除配置项SCUTCLIENT
         sed -i '/CONFIG_FIRMWARE_INCLUDE_MINIEAP/d' .config #删除配置项MINIEAP
@@ -69,6 +65,15 @@ jobs:
         sed -i '/CONFIG_FIRMWARE_INCLUDE_XRAY/d' .config #删除配置项XRAY
         sed -i '/CONFIG_FIRMWARE_INCLUDE_V2RAY/d' .config #删除配置项V2RAY
         sed -i '/CONFIG_FIRMWARE_INCLUDE_TROJAN/d' .config #删除配置项TROJAN
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_TUNSAFE/d' .config #删除配置项TUNSAFE
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_SRELAY/d' .config #删除配置项SRELAY
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_WING/d' .config #删除配置项WING
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_REDSOCKS/d' .config #删除配置项REDSOCKS
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_3PROXY/d' .config #删除配置项3PROXY
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_xTUN/d' .config #删除配置项xTUN
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_KOOLPROXY/d' .config #删除配置项KP广告过滤
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_CADDY/d' .config #删除配置项CADDY
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_WYY/d' .config #删除配置项网易云解锁
         sed -i '/CONFIG_FIRMWARE_INCLUDE_ADBYBY/d' .config #删除配置项adbyby plus+
         sed -i '/CONFIG_FIRMWARE_INCLUDE_ADGUARDHOME/d' .config #删除配置项AdGuard Home
         sed -i '/CONFIG_FIRMWARE_INCLUDE_DNSFORWARDER/d' .config #删除配置项DNSFORWARDER
@@ -79,12 +84,10 @@ jobs:
         sed -i '/CONFIG_FIRMWARE_INCLUDE_ALDRIVER/d' .config #删除配置项阿里云盘
         sed -i '/CONFIG_FIRMWARE_INCLUDE_FRPC/d' .config #删除配置项内网穿透FRPC
         sed -i '/CONFIG_FIRMWARE_INCLUDE_FRPS/d' .config #删除配置项内网穿透FRPS
-        sed -i '/CONFIG_FIRMWARE_INCLUDE_TUNSAFE/d' .config #删除配置项TUNSAFE
-        sed -i '/CONFIG_FIRMWARE_INCLUDE_SRELAY/d' .config #删除配置项SRELAY
-        sed -i '/CONFIG_FIRMWARE_INCLUDE_WIREGUARD/d' .config #删除配置项WireGuard
-        sed -i '/CONFIG_FIRMWARE_INCLUDE_SQM/d' .config #删除配置项SQM
         sed -i '/CONFIG_FIRMWARE_INCLUDE_OPENVPN/d' .config #删除配置项OpenVPN
         sed -i '/CONFIG_FIRMWARE_INCLUDE_SSWAN/d' .config #删除配置项StrongSwan
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_WIREGUARD/d' .config #删除配置项WireGuard
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_SQM/d' .config #删除配置项SQM
         sed -i '/CONFIG_FIRMWARE_INCLUDE_RPL2TP/d' .config #删除配置项RP-L2TP
         sed -i '/CONFIG_FIRMWARE_INCLUDE_XUPNPD/d' .config #删除配置项xUPNPd
         sed -i '/CONFIG_FIRMWARE_INCLUDE_MINIDLNA/d' .config #删除配置项minidlna
@@ -95,6 +98,7 @@ jobs:
         sed -i '/CONFIG_FIRMWARE_INCLUDE_ARIA/d' .config #删除配置项Aria2
         sed -i '/CONFIG_FIRMWARE_INCLUDE_FFMPEG_NEW/d' .config #删除配置项新版ffmpeg
         sed -i '/CONFIG_FIRMWARE_INCLUDE_SMBD_SYSLOG/d' .config #删除配置项SMB日志
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_SMBD36/d' .config #删除配置项samba3.6
         sed -i '/CONFIG_FIRMWARE_INCLUDE_SMBD/d' .config #删除配置项SMB服务
         sed -i '/CONFIG_FIRMWARE_INCLUDE_WINS/d' .config #删除配置项WINS
         sed -i '/CONFIG_FIRMWARE_INCLUDE_FTPD/d' .config #删除配置项FTP服务
@@ -104,6 +108,11 @@ jobs:
         sed -i '/CONFIG_FIRMWARE_INCLUDE_NFSC/d' .config #删除配置项NFS客户端
         sed -i '/CONFIG_FIRMWARE_INCLUDE_PARTED/d' .config #删除配置项parted
         sed -i '/CONFIG_FIRMWARE_INCLUDE_HDPARM/d' .config #删除配置项hdparm
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_NTFS_3G/d' .config #删除配置项NTFS-3G
+        sed -i '/CONFIG_FIRMWARE_ENABLE_UFSD/d' .config #删除配置项Paragon NTFS
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_ANTFS/d' .config #删除配置项antfs
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_CIFS/d' .config #删除配置项CIFS
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_TCPDUMP/d' .config #删除配置项tcpdump
         sed -i '/CONFIG_FIRMWARE_INCLUDE_TTYD/d' .config #删除配置项ttyd
         sed -i '/CONFIG_FIRMWARE_INCLUDE_LRZSZ/d' .config #删除配置项lrzsz
         sed -i '/CONFIG_FIRMWARE_INCLUDE_DUMP1090/d' .config #删除配置项dump1090
@@ -114,8 +123,6 @@ jobs:
         sed -i '/CONFIG_FIRMWARE_INCLUDE_SOCAT/d' .config #删除配置项socat
         sed -i '/CONFIG_FIRMWARE_INCLUDE_NANO/d' .config #删除配置项nano
         sed -i '/CONFIG_FIRMWARE_INCLUDE_VLMCSD/d' .config #删除配置项vlmcsd
-        sed -i '/CONFIG_FIRMWARE_INCLUDE_CURL/d' .config #删除配置项curl
-        sed -i '/CONFIG_FIRMWARE_INCLUDE_IPSET/d' .config #删除配置项ipset
         sed -i '/CONFIG_FIRMWARE_INCLUDE_OPENSSH/d' .config #删除配置项OpenSSH
         sed -i '/CONFIG_FIRMWARE_INCLUDE_DROPBEAR/d' .config #删除配置项dropbear
         sed -i '/CONFIG_FIRMWARE_INCLUDE_SFTP/d' .config #删除配置项sftp
@@ -123,7 +130,6 @@ jobs:
         sed -i '/CONFIG_FIRMWARE_INCLUDE_OPENSSL_EXE/d' .config #删除配置项openssl命令
         sed -i '/CONFIG_FIRMWARE_INCLUDE_OPENSSL_EC/d' .config #删除配置项openssl椭圆曲线
         sed -i '/CONFIG_FIRMWARE_INCLUDE_EAP_PEAP/d' .config #删除配置项EAP-PEAP
-        sed -i '/CONFIG_FIRMWARE_INCLUDE_ANTFS/d' .config #删除配置项ntfs驱动
         sed -i '/CONFIG_FIRMWARE_INCLUDE_UVC/d' .config #删除配置项UVC摄像头
         sed -i '/CONFIG_FIRMWARE_INCLUDE_HID/d' .config #删除配置项USB-HID
         sed -i '/CONFIG_FIRMWARE_INCLUDE_SERIAL/d' .config #删除配置项USB串口
@@ -132,14 +138,21 @@ jobs:
         sed -i '/CONFIG_FIRMWARE_INCLUDE_QOS/d' .config #删除配置项QoS
         sed -i '/CONFIG_FIRMWARE_INCLUDE_IMQ/d' .config #删除配置项IMQ
         sed -i '/CONFIG_FIRMWARE_INCLUDE_IFB/d' .config #删除配置项IFB
-        sed -i '/CONFIG_FIRMWARE_INCLUDE_CIFS/d' .config #删除配置项CIFS
+        sed -i '/CONFIG_FIRMWARE_ENABLE_IPV6/d' .config #删除配置项IPv6开关
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_NAPT66/d' .config #删除配置项IPv6 NAT66
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_SFE/d' .config #删除配置项硬件NAT加速
+        sed -i '/CONFIG_FIRMWARE_WIFI2_DRIVER/d' .config #删除配置项2.4G WiFi驱动
+        sed -i '/CONFIG_FIRMWARE_WIFI5_DRIVER/d' .config #删除配置项5G WiFi驱动
+        sed -i '/CONFIG_FIRMWARE_KERNEL_CONFIG/d' .config #删除配置项WiFi内核配置
         ######################################################################
         #以下选项是定义你需要的功能（y=集成,n=忽略），重新写入到.config文件
-        #本仓库只有4.4内核且无$KERNEL变量，故不使用if/else判断
         ######################################################################
-        echo "CONFIG_FIRMWARE_ENABLE_IPV6=y" >> .config #IPv6
+        echo "CONFIG_FIRMWARE_ENABLE_IPV6=y" >> .config #IPv6支持
+        echo "CONFIG_FIRMWARE_INCLUDE_NAPT66=y" >> .config #IPv6 NAT66，配合IPv6上网
         echo "CONFIG_FIRMWARE_INCLUDE_SFE=y" >> .config #硬件NAT加速
-        echo "CONFIG_FIRMWARE_INCLUDE_OC=n" >> .config #CPU超频关闭
+        echo "CONFIG_FIRMWARE_WIFI2_DRIVER=4.1" >> .config #2.4G MT7603E驱动
+        echo "CONFIG_FIRMWARE_WIFI5_DRIVER=5.0.5.1" >> .config #5G MT7615驱动
+        echo 'CONFIG_FIRMWARE_KERNEL_CONFIG="kernel-3.4.x-5.0.config"' >> .config #WiFi内核配置
         #########################################################################################
         #自定义添加其它功能请参考源码configs/templates/目录下的config文件。按照上面的格式添加即可
         #格式如下：
